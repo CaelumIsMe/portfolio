@@ -47,8 +47,8 @@
 Clone and set up the project:
 
 ```bash
-git clone https://github.com/yourusername/portfolio.git
-cd caelum-cloud-portfolio
+git clone https://github.com/CaelumIsMe/portfolio.git
+cd portfolio
 npm install
 ```
 
