@@ -5,24 +5,28 @@ import { AboutSection } from "@/components/AboutSection";
 import { SpecializationsSection } from "@/components/SpecializationsSection";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { WriteUpsSection } from "@/components/WriteUpsSection";
+import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 
 export const Home = () => {
     return (
-        <div>
+        <div className="relative min-h-screen">
             {/* Background Effects*/}
             <Background />
+            
             {/* Navbar */}
             <Navbar />
-            {/* Main Section */}
+            
+            {/* Main Content */}
             <main>
-                {/* Hero Section */}
                 <HeroSection />
                 <AboutSection />
                 <SpecializationsSection />
                 <ProjectsSection />
                 <WriteUpsSection />
+                <ContactSection />
             </main>
+            
             {/* Footer */}
             <Footer />
         </div>

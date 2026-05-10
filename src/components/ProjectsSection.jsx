@@ -1,102 +1,131 @@
-import { ArrowRight, ExternalLink, Github } from "lucide-react";
+import { ArrowRight, ExternalLink, Github, Layers } from "lucide-react";
 
 const projects = [
     {
         id: 1,
         title: "Inventory Management System",
-        description: "A web application to manage inventory levels, orders, sales and  using Python-Django and Bootstrap.",
+        description: "A professional-grade system for tracking stock levels, orders, and sales with real-time analytics and secure authentication.",
         image: "/projects/project1.png",
         tags: ["Python", "Django", "Bootstrap", "SQLite"],
         demoUrl: "#",
-        githubUrl: "#"
+        githubUrl: "#",
+        category: "Full Stack"
     },
     {
         id: 2,
-        title: "Sentinels: A 2D Gamified Learning Platform",
-        description: "A 2D gamified learning platform that teaches the fundamentals of cybersecurity using Unity and C#.",
+        title: "Sentinels: 2D Learning Platform",
+        description: "An immersive, gamified experience designed to teach cybersecurity fundamentals through interactive missions and challenges.",
         image: "/projects/project2.png",
-        tags: ["Unity", "C#", "Game Development", "Cybersecurity", "Firebase"],
+        tags: ["Unity", "C#", "Game Dev", "Firebase"],
         demoUrl: "#",
-        githubUrl: "#"
+        githubUrl: "#",
+        category: "Game Dev"
     },
     {
         id: 3,
         title: "CVE-2019-9053 POC Exploit",
-        description: "A proof of concept exploit for CVE-2019-9053, a vulnerability in CMS Made Simple versions < 2.2.10 that allows remote code execution.",
+        description: "Advanced proof-of-concept exploit demonstrating RCE vulnerabilities, developed for educational and research purposes.",
         image: "/projects/project3.png",
-        tags: ["Python", "Cybersecurity", "REST API", "Exploit", "Ethical Hacking"],
+        tags: ["Python", "Ethical Hacking", "Exploit"],
         demoUrl: "#",
-        githubUrl: "#"
+        githubUrl: "#",
+        category: "Cybersecurity"
     },
 ];
 
 export const ProjectsSection = () => {
     return (
         <section id="projects" className="py-24 px-4 relative">
-            <div className="container mx-auto max-w-5xl">
-                <h2 className="text-center text-primary text-xl font-semibold mb-10">
-                    &lt;<span className="text-white">Projects</span>/&gt;
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="container">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
+                    <div>
+                        <span className="text-primary font-mono text-sm tracking-widest uppercase mb-4 block">
+                            Portfolio
+                        </span>
+                        <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
+                            Selected <span className="text-primary">Projects.</span>
+                        </h2>
+                    </div>
+                    <p className="text-zinc-500 max-w-md">
+                        A showcase of my recent work in web development, security research, and interactive platforms.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {projects.map((project, key) => (
-                        <div
+                        <article
                             key={key}
-                            className="bg-card border border-border rounded-md overflow-hidden card-hover hover:border-primary flex flex-col"
+                            className="group glass-card rounded-3xl overflow-hidden flex flex-col h-full"
                         >
-                            <div className="h-56 overflow-hidden relative">
+                            {/* Project Image */}
+                            <div className="aspect-video overflow-hidden relative">
+                                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
                                 <img
                                     src={project.image}
                                     alt={project.title}
-                                    className="w-full h-full object-cover transition-transform duration-500 card-hover"
+                                    loading="lazy"
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
-                                <div className="absolute top-3 right-3 flex gap-2">
-                                    <a
-                                        href={project.demoUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-white/80 hover:text-primary"
-                                    >
-                                        <ExternalLink size={22} />
-                                    </a>
+                                <div className="absolute top-4 left-4 z-20">
+                                    <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white uppercase tracking-wider">
+                                        {project.category}
+                                    </span>
+                                </div>
+                                <div className="absolute bottom-4 right-4 flex gap-2 z-20 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                                     <a
                                         href={project.githubUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-white/80 hover:text-primary"
+                                        className="p-2 rounded-full bg-white text-black hover:bg-primary hover:text-white transition-colors"
+                                        title="View Source"
                                     >
-                                        <Github size={22} />
+                                        <Github size={18} />
+                                    </a>
+                                    <a
+                                        href={project.demoUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="p-2 rounded-full bg-white text-black hover:bg-primary hover:text-white transition-colors"
+                                        title="Live Demo"
+                                    >
+                                        <ExternalLink size={18} />
                                     </a>
                                 </div>
                             </div>
-                            <div className="p-6 flex flex-col flex-1">
-                                <h3 className="text-white text-lg font-semibold mb-2">
+
+                            {/* Project Content */}
+                            <div className="p-8 flex flex-col flex-1">
+                                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">
                                     {project.title}
                                 </h3>
-                                <p className="text-gray-300 text-sm mb-4 flex-1">
+                                <p className="text-zinc-400 text-sm leading-relaxed mb-6 flex-1">
                                     {project.description}
                                 </p>
-                                <div className="flex flex-wrap gap-2 mb-2">
+                                
+                                <div className="flex flex-wrap gap-2 pt-6 border-t border-white/5">
                                     {project.tags.map((tag, idx) => (
                                         <span
                                             key={idx}
-                                            className="px-3 py-1 rounded border border-primary text-xs text-white transition-colors duration-200 hover:bg-primary hover:text-white cursor-pointer"
+                                            className="text-[11px] font-medium text-zinc-500 bg-white/5 px-2 py-1 rounded-md"
                                         >
-                                            {tag}
+                                            #{tag}
                                         </span>
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     ))}
                 </div>
-                <div className="text-center mt-12">
+
+                <div className="mt-20 flex justify-center">
                     <a
-                        href="http://github.com/CaelumIsMe"
-                        className="bg-primary text-primary-foreground px-8 py-3 rounded font-medium hover:scale-105 transition-transform duration-200 flex items-center gap-2 mx-auto w-fit"
+                        href="https://github.com/CaelumIsMe"
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="secondary-button flex items-center gap-2"
                     >
-                        Check My Github <ArrowRight size={16} />
+                        View More on GitHub
+                        <ArrowRight size={18} />
                     </a>
                 </div>
             </div>
