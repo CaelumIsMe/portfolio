@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Globe, Github, Linkedin, Twitter, ArrowUp } from "lucide-react";
+import { Facebook, Instagram, Globe, Github, Linkedin, ArrowUp } from "lucide-react";
 
 export const Footer = () => {
     const scrollToTop = () => {
@@ -25,10 +25,10 @@ export const Footer = () => {
                         </p>
                         <div className="flex gap-4">
                             {[
-                                { icon: <Github size={20} />, href: "#", label: "GitHub" },
-                                { icon: <Linkedin size={20} />, href: "#", label: "LinkedIn" },
-                                { icon: <Twitter size={20} />, href: "#", label: "Twitter" },
-                                { icon: <Globe size={20} />, href: "#", label: "Website" }
+                                { icon: <Github size={20} />, href: "https://github.com/CaelumIsMe", label: "GitHub" },
+                                { icon: <Linkedin size={20} />, href: "https://www.linkedin.com/in/joseph-charles-roque-306a96392/", label: "LinkedIn" },
+                                { icon: <Facebook size={20} />, href: "https://www.facebook.com/josephcharles.roque", label: "Facebook" },
+                                { icon: <Globe size={20} />, href: "https://cosedevs.com", label: "Website" }
                             ].map((social, idx) => (
                                 <a
                                     key={idx}
