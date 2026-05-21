@@ -8,16 +8,42 @@ export const ContactSection = () => {
         message: ""
     });
     const [status, setStatus] = useState(null);
+    const formId = import.meta.env.VITE_FORMSPREE_ID;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (!formId) {
+            setStatus("error");
+            console.error("Formspree form ID is not configured");
+            return;
+        }
+
         setStatus("sending");
-        // Simulate API call
-        setTimeout(() => {
-            setStatus("success");
-            setFormData({ name: "", email: "", message: "" });
+
+        try {
+            const response = await fetch(`https://formspree.io/f/${formId}`, {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                setStatus("success");
+                setFormData({ name: "", email: "", message: "" });
+                setTimeout(() => setStatus(null), 3000);
+            } else {
+                setStatus("error");
+                setTimeout(() => setStatus(null), 3000);
+            }
+        } catch (error) {
+            console.error("Form submission error:", error);
+            setStatus("error");
             setTimeout(() => setStatus(null), 3000);
-        }, 1500);
+        }
     };
 
     const handleChange = (e) => {
@@ -72,6 +98,9 @@ export const ContactSection = () => {
 
                         {/* Contact Form */}
                         <form onSubmit={handleSubmit} className="glass-card p-8 rounded-3xl space-y-6">
+                            {/* Honeypot field for spam prevention */}
+                            <input type="text" name="_gotcha" style={{ display: 'none' }} />
+
                             <div className="space-y-2">
                                 <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider ml-1">Name</label>
                                 <div className="relative">
@@ -122,7 +151,7 @@ export const ContactSection = () => {
                                 disabled={status === "sending"}
                                 className="cosmic-button w-full flex items-center justify-center gap-2 group"
                             >
-                                {status === "sending" ? "Sending..." : status === "success" ? "Message Sent!" : "Send Message"}
+                                {status === "sending" ? "Sending..." : status === "success" ? "Message Sent!" : status === "error" ? "Error Sending" : "Send Message"}
                                 <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                             </button>
                         </form>
