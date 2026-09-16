@@ -41,6 +41,8 @@ export const Navbar = () => {
         if (isDesktop) setIsMenuOpen(false);
     }, [isDesktop]);
 
+    // While the full-screen overlay is up, Escape closes it and the page behind
+    // it must not scroll away under the user's thumb.
     useEffect(() => {
         if (!isMenuOpen) return;
 
@@ -48,8 +50,14 @@ export const Navbar = () => {
             if (event.key === "Escape") setIsMenuOpen(false);
         };
 
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
         window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            window.removeEventListener("keydown", handleKeyDown);
+        };
     }, [isMenuOpen]);
 
     const closeMenu = () => setIsMenuOpen(false);
@@ -101,18 +109,25 @@ export const Navbar = () => {
             {isMenuOpen && (
                 <div
                     id="mobile-menu"
-                    className="fixed inset-0 z-40 bg-black/97 backdrop-blur-[24px] flex flex-col items-center justify-center gap-8"
+                    className="fixed inset-0 z-40 bg-black/97 backdrop-blur-[24px] overflow-y-auto"
                 >
-                    {navItems.map((item) => (
-                        <a
-                            key={item.href}
-                            href={item.href}
-                            onClick={closeMenu}
-                            className="text-[30px] font-bold text-zinc-400 transition-colors duration-300 hover:text-white"
-                        >
-                            {item.name}
-                        </a>
-                    ))}
+                    {/*
+                      min-h-full + justify-center centres the links on a tall screen
+                      but lets them grow and scroll on a short one (landscape phones),
+                      instead of clipping the top out of reach.
+                    */}
+                    <div className="min-h-full flex flex-col items-center justify-center gap-8 px-6 py-24">
+                        {navItems.map((item) => (
+                            <a
+                                key={item.href}
+                                href={item.href}
+                                onClick={closeMenu}
+                                className="text-[30px] font-bold text-zinc-400 transition-colors duration-300 hover:text-white"
+                            >
+                                {item.name}
+                            </a>
+                        ))}
+                    </div>
                 </div>
             )}
         </nav>

@@ -15,7 +15,7 @@ export const HeroSection = () => {
             id="hero"
             className="relative flex items-center pt-[104px] pb-10 overflow-hidden"
         >
-            <div className="container grid grid-cols-[repeat(auto-fit,minmax(340px,1fr))] gap-9 items-center">
+            <div className="container grid grid-cols-[repeat(auto-fit,minmax(min(340px,100%),1fr))] gap-9 items-center">
                 {/* Left column */}
                 <div className="flex flex-col items-start min-w-0">
                     <div className="inline-flex items-center gap-2 px-3.5 py-1.5 mb-7 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-zinc-400 opacity-0 animate-fade-in-up">
@@ -62,7 +62,7 @@ export const HeroSection = () => {
                     </div>
 
                     <div
-                        className="flex gap-10 mt-6 pt-[18px] w-full max-w-[34rem] border-t border-white/7 opacity-0 animate-fade-in-up"
+                        className="flex flex-wrap gap-x-10 gap-y-4 mt-6 pt-[18px] w-full max-w-[34rem] border-t border-white/7 opacity-0 animate-fade-in-up"
                         style={{ animationDelay: "0.6s" }}
                     >
                         {stats.map((stat) => (

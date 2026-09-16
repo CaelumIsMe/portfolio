@@ -60,7 +60,7 @@ export const ProjectsSection = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-5">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(min(290px,100%),1fr))] gap-5">
                     {projects.map((project) => (
                         <article
                             key={project.id}
@@ -81,8 +81,12 @@ export const ProjectsSection = () => {
                                     </span>
                                 </div>
 
-                                {/* Revealed on hover, and on keyboard focus so the links stay reachable */}
-                                <div className="absolute bottom-4 right-4 flex gap-2 translate-y-10 opacity-0 transition-all duration-500 ease-lift group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                                {/*
+                                  Revealed on hover, on keyboard focus, and permanently on
+                                  devices that cannot hover at all — otherwise these links
+                                  would be unreachable on a phone.
+                                */}
+                                <div className="absolute bottom-4 right-4 flex gap-2 translate-y-10 opacity-0 transition-all duration-500 ease-lift group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
                                     {project.showSource && (
                                         <a
                                             href={project.githubUrl}

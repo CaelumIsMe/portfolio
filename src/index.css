@@ -67,6 +67,16 @@
     @apply scroll-smooth scroll-pt-20;
   }
 
+  /*
+    Below the 860px nav breakpoint the bar is taller (the 48px hamburger sets its
+    height), so 5rem of scroll padding would let anchor targets slide under it.
+  */
+  @media (width < 860px) {
+    html {
+      scroll-padding-top: 6rem;
+    }
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased selection:bg-primary selection:text-white;
   }
@@ -137,9 +147,13 @@
          hover:bg-white/10 hover:border-white/25 hover:-translate-y-0.5;
 }
 
-/* Hero's three CTAs share one geometry so they align on every wrap */
+/*
+  Hero's three CTAs share one geometry so they align on every wrap. The min-width
+  is capped at 100% because min-width beats max-width in CSS — a flat 232px would
+  push past the viewport on very narrow phones instead of shrinking.
+*/
 @utility btn-hero {
-  @apply flex-[0_1_232px] min-w-[232px] h-[50px] px-[26px];
+  @apply flex-[0_1_232px] min-w-[min(232px,100%)] h-[50px] px-[26px];
 }
 
 #root {

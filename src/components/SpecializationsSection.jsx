@@ -113,7 +113,7 @@ const TagRow = ({ tags }) => (
 export const SpecializationsSection = () => {
     return (
         <section id="specializations" className="relative py-10">
-            <div className="container grid grid-cols-[repeat(auto-fit,minmax(340px,1fr))] gap-8 items-start">
+            <div className="container grid grid-cols-[repeat(auto-fit,minmax(min(340px,100%),1fr))] gap-8 items-start">
                 {/* Left — Deep Specializations */}
                 <div className="min-w-0">
                     <span className="eyebrow text-[11px] tracking-[0.3em] mb-3">Focus Areas</span>
@@ -122,22 +122,22 @@ export const SpecializationsSection = () => {
                     </h2>
 
                     <div className="flex flex-col gap-2.5">
-                        {specializations.map(({ num, icon: Icon, title, desc }) => (
-                            <div key={num} className="stack-row">
+                        {specializations.map((spec) => (
+                            <div key={spec.num} className="stack-row">
                                 <span className="flex-none inline-flex p-[9px] rounded-xl bg-primary/12 border border-primary/22 text-primary">
-                                    <Icon size={18} />
+                                    <spec.icon size={18} />
                                 </span>
                                 <div className="min-w-0">
                                     <div className="flex items-baseline gap-2.5">
                                         <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-zinc-600">
-                                            {num}
+                                            {spec.num}
                                         </span>
                                         <h3 className="text-white font-semibold text-[15px] tracking-[-0.01em] text-balance">
-                                            {title}
+                                            {spec.title}
                                         </h3>
                                     </div>
                                     <p className="mt-[5px] text-zinc-400 text-[13px] leading-[1.6] text-pretty">
-                                        {desc}
+                                        {spec.desc}
                                     </p>
                                 </div>
                             </div>

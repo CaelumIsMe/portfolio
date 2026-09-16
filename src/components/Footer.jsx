@@ -42,14 +42,14 @@ export const Footer = () => {
                             resilient digital environments and profitable web solutions.
                         </p>
                         <div className="flex gap-3.5">
-                            {socials.map(({ icon: Icon, href, label }) => (
+                            {socials.map((social) => (
                                 <a
-                                    key={label}
-                                    href={href}
-                                    aria-label={label}
+                                    key={social.label}
+                                    href={social.href}
+                                    aria-label={social.label}
                                     className="inline-flex p-3 rounded-[14px] bg-white/5 border border-white/10 text-zinc-400 transition-all duration-300 hover:text-primary hover:border-primary/50 hover:bg-primary/5"
                                 >
-                                    <Icon size={20} />
+                                    <social.icon size={20} />
                                 </a>
                             ))}
                         </div>

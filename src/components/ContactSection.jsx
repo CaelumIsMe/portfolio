@@ -3,8 +3,12 @@ import { Mail, MessageSquare, Send, User } from "lucide-react";
 
 const formId = import.meta.env.VITE_FORMSPREE_ID;
 
+/*
+  max-sm:text-base is not cosmetic: iOS Safari force-zooms the whole page when a
+  focused input is under 16px, and the user then has to pinch back out.
+*/
 const inputClasses =
-    "w-full bg-black/40 border border-white/10 rounded-[14px] py-[13px] text-white text-[14.5px] outline-none transition-colors duration-300 focus:border-primary/60";
+    "w-full bg-black/40 border border-white/10 rounded-[14px] py-[13px] text-white text-[14.5px] max-sm:text-base outline-none transition-colors duration-300 focus:border-primary/60";
 
 const labelClasses =
     "text-[11px] font-semibold text-zinc-400 uppercase tracking-[0.12em] ml-1";
@@ -70,7 +74,7 @@ export const ContactSection = () => {
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-9">
+                    <div className="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-9">
                         {/* Contact info */}
                         <div className="flex flex-col justify-center min-w-0">
                             <h3 className="text-[25px] font-bold text-white tracking-[-0.02em] mb-5 text-balance">

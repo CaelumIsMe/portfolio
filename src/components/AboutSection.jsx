@@ -34,18 +34,18 @@ export const AboutSection = () => {
                     </h2>
                 </div>
 
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6 mb-12">
-                    {cards.map(({ icon: Icon, title, description }) => (
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-6 mb-12">
+                    {cards.map((card) => (
                         <div
-                            key={title}
+                            key={card.title}
                             className="glass-card p-6 rounded-[20px] transition-all duration-300 ease-lift hover:border-primary/50 hover:-translate-y-1"
                         >
                             <div className="inline-flex p-3 mb-4 rounded-[14px] bg-primary/10">
-                                <Icon size={32} className="text-primary" />
+                                <card.icon size={32} className="text-primary" />
                             </div>
-                            <h3 className="text-[19px] font-bold text-white mb-3.5">{title}</h3>
+                            <h3 className="text-[19px] font-bold text-white mb-3.5">{card.title}</h3>
                             <p className="text-zinc-400 text-sm leading-[1.7] text-pretty">
-                                {description}
+                                {card.description}
                             </p>
                         </div>
                     ))}
