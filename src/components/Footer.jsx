@@ -1,90 +1,130 @@
-import { Facebook, Instagram, Globe, Github, Linkedin, ArrowUp } from "lucide-react";
+import { ArrowUp, Facebook, Github, Globe, Linkedin, Mail, MapPin } from "lucide-react";
+
+const socials = [
+    { icon: Github, href: "https://github.com/CaelumIsMe", label: "GitHub" },
+    {
+        icon: Linkedin,
+        href: "https://www.linkedin.com/in/joseph-charles-roque-306a96392/",
+        label: "LinkedIn",
+    },
+    { icon: Facebook, href: "https://www.facebook.com/josephcharles.roque", label: "Facebook" },
+    { icon: Globe, href: "https://cosedevs.com", label: "Website" },
+];
+
+const navLinks = [
+    { name: "About", href: "#about" },
+    { name: "Projects", href: "#projects" },
+    { name: "Stack", href: "#stack" },
+    { name: "Contact", href: "#contact" },
+];
+
+const scrollToTop = () => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+};
 
 export const Footer = () => {
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
     return (
-        <footer className="relative bg-black pt-24 pb-12 overflow-hidden">
-            {/* Subtle Gradient background */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-            
-            <div className="container relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                    {/* Brand Section */}
-                    <div className="md:col-span-2">
-                        <a href="#hero" className="text-2xl font-bold inline-block mb-6 group">
+        <footer className="relative bg-black pt-10 pb-7 overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-px bg-[linear-gradient(to_right,transparent,rgba(220,38,38,0.5),transparent)]" />
+
+            <div className="container relative">
+                <div className="flex flex-wrap gap-8 mb-[26px]">
+                    {/* Brand */}
+                    <div className="flex-[2_1_320px] min-w-0">
+                        <a href="#hero" className="inline-block mb-6 text-[22px] font-bold">
                             <span className="text-primary">&lt;</span>
                             <span className="text-white">Roque</span>
                             <span className="text-primary">/&gt;</span>
                         </a>
-                        <p className="text-zinc-500 max-w-sm mb-8 leading-relaxed">
-                            Security Researcher & Full Stack Developer dedicated to building 
-                            resilient digital environments and innovative web solutions.
+                        <p className="max-w-[24rem] mb-8 text-zinc-500 text-[14.5px] leading-[1.75] text-pretty">
+                            DevOps Engineer &amp; Full Stack Developer dedicated to building
+                            resilient digital environments and profitable web solutions.
                         </p>
-                        <div className="flex gap-4">
-                            {[
-                                { icon: <Github size={20} />, href: "https://github.com/CaelumIsMe", label: "GitHub" },
-                                { icon: <Linkedin size={20} />, href: "https://www.linkedin.com/in/joseph-charles-roque-306a96392/", label: "LinkedIn" },
-                                { icon: <Facebook size={20} />, href: "https://www.facebook.com/josephcharles.roque", label: "Facebook" },
-                                { icon: <Globe size={20} />, href: "https://cosedevs.com", label: "Website" }
-                            ].map((social, idx) => (
+                        <div className="flex gap-3.5">
+                            {socials.map(({ icon: Icon, href, label }) => (
                                 <a
-                                    key={idx}
-                                    href={social.href}
-                                    aria-label={social.label}
-                                    className="p-3 rounded-xl bg-white/5 border border-white/10 text-zinc-400 hover:text-primary hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
+                                    key={label}
+                                    href={href}
+                                    aria-label={label}
+                                    className="inline-flex p-3 rounded-[14px] bg-white/5 border border-white/10 text-zinc-400 transition-all duration-300 hover:text-primary hover:border-primary/50 hover:bg-primary/5"
                                 >
-                                    {social.icon}
+                                    <Icon size={20} />
                                 </a>
                             ))}
                         </div>
                     </div>
 
-                    {/* Quick Links */}
-                    <div>
-                        <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">Navigation</h4>
-                        <ul className="space-y-4">
-                            {['About', 'Projects', 'Write-Ups', 'Contact'].map((link) => (
-                                <li key={link}>
-                                    <a 
-                                        href={`#${link.toLowerCase().replace(' ', '-')}`} 
-                                        className="text-zinc-500 hover:text-white transition-colors duration-300 text-sm flex items-center gap-2 group"
+                    {/* Navigation */}
+                    <div className="flex-[1_1_150px] min-w-0">
+                        <h4 className="mb-6 text-white font-bold uppercase tracking-[0.16em] text-[11px]">
+                            Navigation
+                        </h4>
+                        <ul className="flex flex-col gap-4 list-none p-0 m-0">
+                            {navLinks.map((link) => (
+                                <li key={link.href}>
+                                    <a
+                                        href={link.href}
+                                        className="text-zinc-500 text-sm transition-colors duration-300 hover:text-white"
                                     >
-                                        <span className="w-1.5 h-1.5 rounded-full bg-primary scale-0 group-hover:scale-100 transition-transform" />
-                                        {link}
+                                        {link.name}
                                     </a>
                                 </li>
                             ))}
                         </ul>
                     </div>
 
-                    {/* Contact Info */}
-                    <div>
-                        <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">Legal</h4>
-                        <ul className="space-y-4 text-sm text-zinc-500">
-                            <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
+                    {/* Get In Touch */}
+                    <div className="flex-[1_1_250px] min-w-0">
+                        <h4 className="mb-6 text-white font-bold uppercase tracking-[0.16em] text-[11px]">
+                            Get In Touch
+                        </h4>
+                        <ul className="flex flex-col gap-4 list-none p-0 m-0">
+                            <li className="flex items-start gap-3">
+                                <MapPin size={17} className="flex-none mt-0.5 text-zinc-500" />
+                                <span className="text-zinc-400 text-sm leading-[1.5]">
+                                    Bacolod City, Negros Occidental, Philippines
+                                </span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <Mail size={17} className="flex-none mt-0.5 text-zinc-500" />
+                                <a
+                                    href="mailto:roque.josephcharles@gmail.com"
+                                    className="text-zinc-400 text-sm leading-[1.5] break-all transition-colors duration-300 hover:text-white"
+                                >
+                                    roque.josephcharles@gmail.com
+                                </a>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <Globe size={17} className="flex-none mt-0.5 text-zinc-500" />
+                                <a
+                                    href="https://cosedevs.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-zinc-400 text-sm leading-[1.5] transition-colors duration-300 hover:text-white"
+                                >
+                                    COS Devs
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
 
-                {/* Bottom Bar */}
-                <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div className="pt-8 border-t border-white/6 flex flex-wrap justify-between items-center gap-5">
                     <p className="text-zinc-600 text-xs">
-                        © {new Date().getFullYear()} Charles Roque. Crafted with passion & security.
+                        © {new Date().getFullYear()} Charles Roque. Crafted with passion &amp;
+                        security.
                     </p>
-                    
-                    <button 
+
+                    <button
+                        type="button"
                         onClick={scrollToTop}
-                        className="group flex items-center gap-2 text-xs font-bold text-zinc-400 hover:text-white transition-colors"
+                        className="group inline-flex items-center gap-2.5 text-[11.5px] font-bold text-zinc-400 tracking-[0.08em] whitespace-nowrap transition-colors duration-300 hover:text-white"
                     >
                         BACK TO TOP
-                        <div className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:border-primary/50 transition-colors">
+                        <span className="inline-flex p-2 rounded-[10px] bg-white/5 border border-white/10 transition-colors duration-300 group-hover:border-primary/50">
                             <ArrowUp size={14} className="text-primary" />
-                        </div>
+                        </span>
                     </button>
                 </div>
             </div>

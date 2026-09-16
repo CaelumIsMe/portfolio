@@ -1,9 +1,9 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 @theme {
   --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
-  
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
   --color-border: rgba(220, 38, 38, 0.2);
   --color-background: #000000;
   --color-foreground: #ffffff;
@@ -14,10 +14,15 @@
   --color-card: rgba(24, 24, 27, 0.6);
   --color-card-border: rgba(255, 255, 255, 0.1);
 
+  /* Card / row lifts */
+  --ease-lift: cubic-bezier(0.22, 1, 0.36, 1);
+
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-subtle: pulse-subtle 4s ease-in-out infinite;
   --animate-fade-in: fade-in 0.7s ease-out forwards;
   --animate-fade-in-up: fade-in-up 0.7s ease-out forwards;
+  --animate-ping-dot: ping-dot 1.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-bounce-y: bounce-y 1.6s infinite;
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
@@ -33,7 +38,15 @@
   }
   @keyframes fade-in-up {
     from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes ping-dot {
+    75%, 100% { transform: scale(2); opacity: 0; }
+  }
+  /* Only the Y hop — the -50% centring is left to the `translate` property. */
+  @keyframes bounce-y {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(25%); }
   }
 }
 
@@ -59,37 +72,74 @@
   }
 }
 
-@utility container {
-  margin-inline: auto;
-  padding-inline: 1.5rem;
-  @media (width >= 640px) { max-width: 640px; }
-  @media (width >= 768px) { max-width: 768px; }
-  @media (width >= 1024px) { max-width: 1024px; }
-  @media (width >= 1280px) { max-width: 1200px; }
+/*
+  Entrance animations rely on `forwards` to land on opacity: 1, so reduced motion
+  collapses the duration instead of removing the animation — killing it outright
+  would leave every staggered element stuck at opacity: 0.
+*/
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
 }
 
-@utility glass {
-  @apply bg-black/40 backdrop-blur-xl border border-white/10;
+@utility container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
 }
 
 @utility glass-card {
-  @apply bg-zinc-900/40 backdrop-blur-md border border-white/5 hover:border-primary/50 transition-all duration-300;
+  @apply bg-zinc-900/50 backdrop-blur-[12px] border border-white/6;
 }
 
-@utility text-glow {
-  text-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+/* Compact row shared by Specializations and Technologies Used */
+@utility stack-row {
+  @apply flex items-start gap-3.5 px-4 py-[13px] rounded-[14px]
+         bg-zinc-900/55 backdrop-blur-[12px] border border-white/7
+         transition-all duration-300 ease-lift
+         hover:border-primary/50 hover:bg-zinc-800/60 hover:translate-x-1;
 }
 
-@utility cosmic-button {
-  @apply px-8 py-3 rounded-full bg-primary text-white font-semibold
-         transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)]
-         hover:scale-105 active:scale-95 disabled:opacity-50 disabled:pointer-events-none;
+@utility eyebrow {
+  @apply block text-primary font-mono uppercase;
 }
 
-@utility secondary-button {
-  @apply px-8 py-3 rounded-full border border-white/10 bg-white/5 text-white font-semibold
-         transition-all duration-300 hover:bg-white/10 hover:border-white/20
-         hover:scale-105 active:scale-95;
+@utility chip {
+  @apply px-3.5 py-[7px] rounded-full bg-white/5 border border-white/10
+         font-mono text-[10.5px] font-medium text-zinc-400 tracking-[0.04em]
+         whitespace-nowrap cursor-default transition-all duration-300
+         hover:text-white hover:border-primary/50;
+}
+
+@utility btn-base {
+  @apply inline-flex items-center justify-center gap-2.5 rounded-full
+         text-[15px] font-semibold leading-none transition-all duration-300
+         active:scale-[0.96];
+}
+
+@utility btn-primary {
+  @apply bg-primary border border-primary text-white
+         hover:shadow-[0_0_24px_rgba(220,38,38,0.45)] hover:-translate-y-0.5
+         disabled:opacity-60 disabled:pointer-events-none;
+}
+
+@utility btn-secondary {
+  @apply bg-white/5 border border-white/12 text-white
+         hover:bg-white/10 hover:border-white/25 hover:-translate-y-0.5;
+}
+
+/* Hero's three CTAs share one geometry so they align on every wrap */
+@utility btn-hero {
+  @apply flex-[0_1_232px] min-w-[232px] h-[50px] px-[26px];
 }
 
 #root {

@@ -1,94 +1,120 @@
-import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const navItems = [
-    { name: 'Home', href: "#hero" },
-    { name: 'About', href: "#about" },
-    { name: 'Projects', href: "#projects" },
-    { name: 'Write-Ups', href: "#write-ups" },
-    { name: 'Contact', href: "#contact" },
+    { name: "Home", href: "#hero" },
+    { name: "About", href: "#about" },
+    { name: "Projects", href: "#projects" },
+    { name: "Stack", href: "#stack" },
+    { name: "Contact", href: "#contact" },
 ];
 
-export const Navbar = () => {
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+/*
+  The design switches to the hamburger at a 860px viewport, which sits between
+  Tailwind's md (768px) and lg (1024px) stops — so the breakpoint lives in JS.
+*/
+const DESKTOP_QUERY = "(min-width: 860px)";
+
+const useIsDesktop = () => {
+    const [isDesktop, setIsDesktop] = useState(
+        () => typeof window === "undefined" || window.matchMedia(DESKTOP_QUERY).matches
+    );
 
     useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
-        };
+        const query = window.matchMedia(DESKTOP_QUERY);
+        const handleChange = (event) => setIsDesktop(event.matches);
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        setIsDesktop(query.matches);
+        query.addEventListener("change", handleChange);
+        return () => query.removeEventListener("change", handleChange);
     }, []);
 
+    return isDesktop;
+};
+
+export const Navbar = () => {
+    const isDesktop = useIsDesktop();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    // Growing past the breakpoint with the overlay open would trap it open.
+    useEffect(() => {
+        if (isDesktop) setIsMenuOpen(false);
+    }, [isDesktop]);
+
+    useEffect(() => {
+        if (!isMenuOpen) return;
+
+        const handleKeyDown = (event) => {
+            if (event.key === "Escape") setIsMenuOpen(false);
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [isMenuOpen]);
+
+    const closeMenu = () => setIsMenuOpen(false);
+
     return (
-        <nav
-            className={cn(
-                "fixed w-full z-50 transition-all duration-300 py-5 bg-black/100 border-b border-border",
-            )}
-        >
-            <div className="container flex items-center justify-between">
+        <nav className="fixed top-0 left-0 w-full z-50 py-[18px] bg-black/86 backdrop-blur-[20px] border-b border-border">
+            <div className="container flex items-center justify-between gap-4">
                 <a
-                    className="text-2xl font-bold group flex items-center"
                     href="#hero"
+                    className="text-[22px] font-bold tracking-[-0.02em] flex items-center"
                 >
-                    <span className="text-primary group-hover:text-white transition-colors duration-300">&lt;</span>
-                    <span className="text-white tracking-tight">Roque</span>
-                    <span className="text-primary group-hover:text-white transition-colors duration-300">/&gt;</span>
+                    <span className="text-primary">&lt;</span>
+                    <span className="text-white">Roque</span>
+                    <span className="text-primary">/&gt;</span>
                 </a>
 
-                {/* desktop version */}
-                <div className="hidden md:flex items-center space-x-1">
-                    {navItems.map((item, key) => (
-                        <a
-                            key={key}
-                            href={item.href}
-                            className="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white transition-all duration-300 relative group"
-                        >
-                            {item.name}
-                            <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-                        </a>
-                    ))}
-                    <a 
-                        href="#contact" 
-                        className="ml-4 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-sm font-semibold text-white hover:bg-primary hover:border-primary transition-all duration-300"
-                    >
-                        Let's Talk
-                    </a>
-                </div>
-
-                {/* mobile nav trigger */}
-                <button
-                    onClick={() => setIsMenuOpen((prev) => !prev)}
-                    className="md:hidden p-2 text-white hover:text-primary transition-colors z-50"
-                    aria-label="Toggle menu"
-                >
-                    {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-                </button>
-
-                {/* mobile nav overlay */}
-                <div
-                    className={cn(
-                        "fixed inset-0 bg-black/98 backdrop-blur-2xl z-40 flex flex-col items-center justify-center transition-all duration-500 ease-in-out md:hidden",
-                        isMenuOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
-                    )}
-                >
-                    <div className="flex flex-col space-y-8 text-center">
-                        {navItems.map((item, key) => (
+                {isDesktop ? (
+                    <div className="flex items-center gap-1">
+                        {navItems.map((item) => (
                             <a
-                                key={key}
+                                key={item.href}
                                 href={item.href}
-                                className="text-3xl font-bold text-zinc-500 hover:text-white transition-colors duration-300"
-                                onClick={() => setIsMenuOpen(false)}
+                                className="px-3.5 py-2 text-[13.5px] font-medium text-zinc-400 whitespace-nowrap transition-colors duration-300 hover:text-white"
                             >
                                 {item.name}
                             </a>
                         ))}
+                        <a
+                            href="#contact"
+                            className="ml-2.5 px-[22px] py-[9px] rounded-full bg-white/5 border border-white/10 text-[13.5px] font-semibold text-white whitespace-nowrap transition-all duration-300 hover:bg-primary hover:border-primary"
+                        >
+                            Let's Talk
+                        </a>
                     </div>
-                </div>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={() => setIsMenuOpen((open) => !open)}
+                        aria-label="Toggle menu"
+                        aria-expanded={isMenuOpen}
+                        aria-controls="mobile-menu"
+                        className="relative z-[60] inline-flex items-center justify-center w-12 h-12 text-white"
+                    >
+                        {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                    </button>
+                )}
             </div>
+
+            {isMenuOpen && (
+                <div
+                    id="mobile-menu"
+                    className="fixed inset-0 z-40 bg-black/97 backdrop-blur-[24px] flex flex-col items-center justify-center gap-8"
+                >
+                    {navItems.map((item) => (
+                        <a
+                            key={item.href}
+                            href={item.href}
+                            onClick={closeMenu}
+                            className="text-[30px] font-bold text-zinc-400 transition-colors duration-300 hover:text-white"
+                        >
+                            {item.name}
+                        </a>
+                    ))}
+                </div>
+            )}
         </nav>
     );
 };
