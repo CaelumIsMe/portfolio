@@ -63,50 +63,62 @@ export const Navbar = () => {
     const closeMenu = () => setIsMenuOpen(false);
 
     return (
-        <nav className="fixed top-0 left-0 w-full z-50 py-[18px] bg-black/86 backdrop-blur-[20px] border-b border-border">
-            <div className="container flex items-center justify-between gap-4">
-                <a
-                    href="#hero"
-                    className="text-[22px] font-bold tracking-[-0.02em] flex items-center"
-                >
-                    <span className="text-primary">&lt;</span>
-                    <span className="text-white">Roque</span>
-                    <span className="text-primary">/&gt;</span>
-                </a>
-
-                {isDesktop ? (
-                    <div className="flex items-center gap-1">
-                        {navItems.map((item) => (
-                            <a
-                                key={item.href}
-                                href={item.href}
-                                className="px-3.5 py-2 text-[13.5px] font-medium text-zinc-400 whitespace-nowrap transition-colors duration-300 hover:text-white"
-                            >
-                                {item.name}
-                            </a>
-                        ))}
-                        <a
-                            href="#contact"
-                            className="ml-2.5 px-[22px] py-[9px] rounded-full bg-white/5 border border-white/10 text-[13.5px] font-semibold text-white whitespace-nowrap transition-all duration-300 hover:bg-primary hover:border-primary"
-                        >
-                            Let's Talk
-                        </a>
-                    </div>
-                ) : (
-                    <button
-                        type="button"
-                        onClick={() => setIsMenuOpen((open) => !open)}
-                        aria-label="Toggle menu"
-                        aria-expanded={isMenuOpen}
-                        aria-controls="mobile-menu"
-                        className="relative z-[60] inline-flex items-center justify-center w-12 h-12 text-white"
+        <>
+            <nav className="fixed top-0 left-0 w-full z-50 py-[18px] bg-black/86 backdrop-blur-[20px] border-b border-border">
+                <div className="container flex items-center justify-between gap-4">
+                    <a
+                        href="#hero"
+                        className="text-[22px] font-bold tracking-[-0.02em] flex items-center"
                     >
-                        {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-                    </button>
-                )}
-            </div>
+                        <span className="text-primary">&lt;</span>
+                        <span className="text-white">Roque</span>
+                        <span className="text-primary">/&gt;</span>
+                    </a>
 
-            {isMenuOpen && (
+                    {isDesktop ? (
+                        <div className="flex items-center gap-1">
+                            {navItems.map((item) => (
+                                <a
+                                    key={item.href}
+                                    href={item.href}
+                                    className="px-3.5 py-2 text-[13.5px] font-medium text-zinc-400 whitespace-nowrap transition-colors duration-300 hover:text-white"
+                                >
+                                    {item.name}
+                                </a>
+                            ))}
+                            <a
+                                href="#contact"
+                                className="ml-2.5 px-[22px] py-[9px] rounded-full bg-white/5 border border-white/10 text-[13.5px] font-semibold text-white whitespace-nowrap transition-all duration-300 hover:bg-primary hover:border-primary"
+                            >
+                                Let's Talk
+                            </a>
+                        </div>
+                    ) : (
+                        <button
+                            type="button"
+                            onClick={() => setIsMenuOpen((open) => !open)}
+                            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                            aria-expanded={isMenuOpen}
+                            aria-controls="mobile-menu"
+                            className="relative z-[60] inline-flex items-center justify-center w-12 h-12 text-white"
+                        >
+                            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                        </button>
+                    )}
+                </div>
+            </nav>
+
+            {/*
+              This overlay MUST stay a sibling of <nav>, never a child. The nav has
+              backdrop-blur, and an element with a backdrop-filter becomes the
+              containing block for its position:fixed descendants — nested inside,
+              `inset-0` would resolve to the ~84px-tall navbar rather than the
+              viewport and collapse this menu into an invisible sliver.
+
+              It sits at z-40, below the nav's z-50, so the bar and its close
+              button stay visible and tappable on top of the overlay.
+            */}
+            {!isDesktop && isMenuOpen && (
                 <div
                     id="mobile-menu"
                     className="fixed inset-0 z-40 bg-black/97 backdrop-blur-[24px] overflow-y-auto"
@@ -130,6 +142,6 @@ export const Navbar = () => {
                     </div>
                 </div>
             )}
-        </nav>
+        </>
     );
 };
