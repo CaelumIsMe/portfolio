@@ -1,7 +1,18 @@
 import { useState } from "react";
 import { Mail, MessageSquare, Send, User } from "lucide-react";
+import { useSubmissionLimit } from "@/lib/useSubmissionLimit";
 
 const formId = import.meta.env.VITE_FORMSPREE_ID;
+
+const MAX_MESSAGES = 3;
+const LIMIT_WINDOW_MS = 12 * 60 * 60 * 1000;
+
+const formatWait = (ms) => {
+    const minutes = Math.max(1, Math.ceil(ms / 60000));
+    if (minutes < 60) return `${minutes} minute${minutes === 1 ? "" : "s"}`;
+    const hours = Math.ceil(minutes / 60);
+    return `${hours} hour${hours === 1 ? "" : "s"}`;
+};
 
 /*
   max-sm:text-base is not cosmetic: iOS Safari force-zooms the whole page when a
@@ -22,9 +33,17 @@ const submitLabels = {
 export const ContactSection = () => {
     const [formData, setFormData] = useState({ name: "", email: "", message: "" });
     const [status, setStatus] = useState(null);
+    const { isLimited, resetAt, canSend, recordSend } = useSubmissionLimit({
+        max: MAX_MESSAGES,
+        windowMs: LIMIT_WINDOW_MS,
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // The button is already disabled when limited; this is the real gate,
+        // and it re-reads storage so sends from another tab still count.
+        if (!canSend()) return;
 
         if (!formId) {
             setStatus("error");
@@ -48,6 +67,9 @@ export const ContactSection = () => {
             if (response.ok) {
                 setStatus("success");
                 setFormData({ name: "", email: "", message: "" });
+                // Only a delivered message consumes a slot — a Formspree outage
+                // shouldn't cost the visitor part of their quota.
+                recordSend();
             } else {
                 setStatus("error");
             }
@@ -202,13 +224,33 @@ export const ContactSection = () => {
 
                             <button
                                 type="submit"
-                                disabled={status === "sending"}
+                                disabled={status === "sending" || isLimited}
                                 aria-live="polite"
                                 className="btn-base btn-primary w-full px-[30px] py-3.5"
                             >
-                                {submitLabels[status] ?? "Send Message"}
+                                {isLimited
+                                    ? "Message Limit Reached"
+                                    : (submitLabels[status] ?? "Send Message")}
                                 <Send size={18} />
                             </button>
+
+                            {isLimited && resetAt && (
+                                <p
+                                    role="status"
+                                    className="text-[12px] leading-[1.6] text-zinc-500 text-center text-pretty"
+                                >
+                                    You&rsquo;ve sent {MAX_MESSAGES} messages in the last 12 hours.
+                                    You can send another in about {formatWait(resetAt - Date.now())}
+                                    , or email me directly at{" "}
+                                    <a
+                                        href="mailto:roque.josephcharles@gmail.com"
+                                        className="text-zinc-400 break-all transition-colors duration-300 hover:text-primary"
+                                    >
+                                        roque.josephcharles@gmail.com
+                                    </a>
+                                    .
+                                </p>
+                            )}
                         </form>
                     </div>
                 </div>
